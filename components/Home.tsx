@@ -1,7 +1,9 @@
 import Image from 'next/image'
+import QRCode from 'qrcode'
 import { Donut, UnitChart } from './charts'
 import { C } from './colors'
 import { DemoForm } from './DemoForm'
+import { Flow, type Lane } from './Flow'
 import { Cite, Footer } from './Footer'
 import { Header } from './Header'
 import { type Lang, translator } from './lang'
@@ -19,7 +21,7 @@ export function Home({ lang }: { lang: Lang }) {
         <Context t={t} />
         <Chain t={t} />
         <Product t={t} />
-        <Start t={t} />
+        <Start t={t} lang={lang} />
         <section className="demo" id="demo">
           <figure>
             <Image src="/img/welcome.webp" width={1080} height={721} alt={t('Two women farmers laughing while planting rice', 'धान रोप्दै खुसी दुई किसान दिदीबहिनी')} />
@@ -152,32 +154,28 @@ function Context({ t }: { t: T }) {
   )
 }
 
-function Route({ stops, kind }: { stops: { name: string; note: string; price?: string; pickup?: boolean }[]; kind: 'before' | 'after' }) {
-  return (
-    <ol className={`route ${kind}`}>
-      {stops.map(s => (
-        <li key={s.name} className={s.pickup ? 'pickup' : undefined}>
-          {s.price && <em>{s.price}</em>}
-          <b>{s.name}</b>
-          <small>{s.note}</small>
-        </li>
-      ))}
-    </ol>
-  )
-}
-
 function Chain({ t }: { t: T }) {
-  const before = [
-    { name: t('Farmer', 'किसान'), note: t('sells at the collector’s price', 'संकलकले भनेको मूल्यमा'), price: t('Rs 40', 'रु. ४०') },
-    { name: t('Collector', 'संकलक'), note: t('sets the price', 'मूल्य उसैले तोक्छ') },
-    { name: t('Wholesale market', 'थोक बजार'), note: t('some spoils on the way', 'बाटोमै केही कुहिन्छ') },
-    { name: t('Retailer', 'खुद्रा पसल'), note: t('adds a margin', 'थप नाफा') },
-    { name: t('Buyer', 'उपभोक्ता'), note: t('pays for every hand', 'हरेक हातको मूल्य तिर्छ'), price: t('Rs 75', 'रु. ७५') },
-  ]
-  const after = [
-    { name: t('Verified farmer', 'प्रमाणित किसान'), note: t('lists the harvest and sets the price', 'उब्जनी र मूल्य आफैं राख्छ') },
-    { name: t('Ward pickup point', 'वडाको संकलन केन्द्र'), note: t('on set days, fresh', 'तोकिएको दिन, ताजै'), pickup: true },
-    { name: t('Buyer', 'खरिदकर्ता'), note: t('pays the farmer directly', 'पैसा सिधै किसानलाई') },
+  const lanes: Lane[] = [
+    {
+      kind: 'before', title: t('Before', 'पहिले'), count: t('5 hands', '५ हात'),
+      result: t('The farmer gets Rs 40 of the Rs 75', 'रु. ७५ मध्ये किसानलाई रु. ४० मात्र'),
+      stops: [
+        { icon: 'farm', name: t('Farmer', 'किसान'), note: t('sells at the collector’s price', 'संकलकले भनेको मूल्यमा बेच्छ'), price: t('Rs 40', 'रु. ४०') },
+        { icon: 'collector', name: t('Collector', 'संकलक'), note: t('sets the price', 'मूल्य उसैले तोक्छ') },
+        { icon: 'truck', name: t('Wholesale market', 'थोक बजार'), note: t('long haul, hours in the sun', 'लामो ढुवानी, घाममा घण्टौं'), loss: t('20–50% of fruit and vegetables is lost after harvest', 'टिपेपछि २०–५०% फलफूल-तरकारी खेर') },
+        { icon: 'shop', name: t('Retailer', 'खुद्रा पसल'), note: t('adds a margin', 'थप नाफा राख्छ') },
+        { icon: 'kitchen', name: t('Buyer', 'उपभोक्ता'), note: t('pays for every hand', 'हरेक हातको मूल्य तिर्छ'), price: t('Rs 75', 'रु. ७५') },
+      ],
+    },
+    {
+      kind: 'after', title: t('With SmartKrishiAI', 'स्मार्ट कृषिसँग'), count: t('3 steps', '३ चरण'),
+      result: t('Payment goes straight to the farmer', 'भुक्तानी सिधै किसानलाई'),
+      stops: [
+        { icon: 'farm', name: t('Verified farmer', 'प्रमाणित किसान'), note: t('lists the harvest and sets the price', 'उब्जनी र मूल्य आफैं राख्छ') },
+        { icon: 'pickup', name: t('Ward pickup point', 'वडाको संकलन केन्द्र'), note: t('on set days, still fresh', 'तोकिएको दिन, ताजै') },
+        { icon: 'kitchen', name: t('Buyer', 'खरिदकर्ता'), note: t('a home, hotel or trader', 'घर, होटल वा व्यापारी') },
+      ],
+    },
   ]
   const roles = [
     {
@@ -218,12 +216,7 @@ function Chain({ t }: { t: T }) {
             </ul>
             <figcaption>{t('Tomato value chain study, Bhaktapur, 2022 data', 'गोलभेडा मूल्य शृङ्खला अध्ययन, भक्तपुर, २०७९ को तथ्याङ्क')}<Cite n={[7]} /></figcaption>
           </figure>
-          <div className="routes">
-            <h3>{t('Before: five hands', 'पहिले: पाँच हात')}</h3>
-            <Route kind="before" stops={before} />
-            <h3>{t('Now: farmer to buyer, through the ward', 'अब: वडा हुँदै किसानदेखि खरिदकर्तासम्म')}</h3>
-            <Route kind="after" stops={after} />
-          </div>
+          <Flow lanes={lanes} replay={t('Watch again', 'फेरि हेर्नुहोस्')} />
         </div>
 
         <div className="roles" role="table">
@@ -290,24 +283,50 @@ function Product({ t }: { t: T }) {
   )
 }
 
-function Start({ t }: { t: T }) {
-  const paths = [
-    { href: 'https://play.google.com/store/apps/details?id=np.smartkrishiai.app', who: t('Farmer or buyer', 'किसान वा खरिदकर्ता'), what: t('Download the app', 'एप डाउनलोड गर्नुहोस्'), go: 'Google Play' },
-    { href: 'https://portal.smartkrishiai.com', who: t('Palika or ward staff', 'पालिका वा वडाका कर्मचारी'), what: t('Log in to the portal', 'पोर्टलमा लगइन'), go: 'portal.smartkrishiai.com' },
-    { href: '#demo', who: t('Mayor, chair or IT officer', 'नगर/गाउँपालिका प्रमुख वा आईटी अधिकृत'), what: t('Bring it to your Palika', 'आफ्नो पालिकामा ल्याउनुहोस्'), go: t('Request a demo', 'डेमो माग्नुहोस्') },
-  ]
+const PLAY = 'https://play.google.com/store/apps/details?id=np.smartkrishiai.app'
+const PORTAL = 'https://portal.smartkrishiai.com'
+
+async function Start({ t, lang }: { t: T; lang: Lang }) {
+  // Drawn at build time, so the page carries the QR as plain SVG.
+  const qr = await QRCode.toString(PLAY, { type: 'svg', margin: 0, errorCorrectionLevel: 'M', color: { dark: '#16241C', light: '#ffffff' } })
   return (
     <section className="start" id="start">
       <div className="wrap">
         <h2 className="h2">{t('Who are you?', 'तपाईं को हुनुहुन्छ?')}</h2>
-        <div className="paths">
-          {paths.map(p => (
-            <a key={p.href} href={p.href}>
-              <small>{p.who}</small>
-              <b>{p.what}</b>
-              <span className="go">{p.go}</span>
+        <div className="tiles">
+          <div className="tile app">
+            <small>{t('Farmer or buyer', 'किसान वा खरिदकर्ता')}</small>
+            <h3>{t('Download the app', 'एप डाउनलोड गर्नुहोस्')}</h3>
+            <p>{t('Crop and animal doctor, weather and the fresh market, in Nepali.', 'बाली र पशु डाक्टर, मौसम र ताजा बजार, नेपालीमै।')}</p>
+            <a className="play" href={PLAY}>
+              <Image src={`/img/badge/${lang}.png`} width={646} height={250} alt={t('Get it on Google Play', 'Google Play मा प्राप्त गर्नुहोस्')} />
             </a>
-          ))}
+            <div className="qr">
+              <span dangerouslySetInnerHTML={{ __html: qr }} />
+              <p>{t('On a computer? Scan with your phone camera.', 'कम्प्युटरमा हुनुहुन्छ? फोनको क्यामेराले स्क्यान गर्नुहोस्।')}</p>
+            </div>
+            <div className="peek phone"><Image src="/img/app-home.webp" width={780} height={1688} alt="" /></div>
+          </div>
+
+          <a className="tile portal-tile" href={PORTAL}>
+            <small>{t('Palika or ward staff', 'पालिका वा वडाका कर्मचारी')}</small>
+            <h3>{t('Log in to the portal', 'पोर्टलमा लगइन')}</h3>
+            <p>{t('Farmers’ questions, the registry, alerts and the monthly report.', 'किसानका प्रश्न, दर्ता, चेतावनी र मासिक प्रतिवेदन।')}</p>
+            <span className="btn">{t('Open the portal', 'पोर्टल खोल्नुहोस्')}</span>
+            <span className="url">portal.smartkrishiai.com</span>
+            <div className="peek browser">
+              <i /><i /><i />
+              <Image src="/img/portal-report.webp" width={1440} height={2099} alt="" />
+            </div>
+          </a>
+
+          <a className="tile demo-tile" href="#demo">
+            <div className="tile-photo"><Image src="/img/terrace.webp" width={1080} height={810} alt="" /></div>
+            <small>{t('Mayor, chair or IT officer', 'नगर/गाउँपालिका प्रमुख वा आईटी अधिकृत')}</small>
+            <h3>{t('Bring it to your Palika', 'आफ्नो पालिकामा ल्याउनुहोस्')}</h3>
+            <p>{t('We come to your office and show the app and portal to your team.', 'हामी कार्यालयमै आएर तपाईंको टोलीलाई एप र पोर्टल देखाउँछौं।')}</p>
+            <span className="btn gold">{t('Request a demo', 'डेमो माग्नुहोस्')}</span>
+          </a>
         </div>
       </div>
     </section>
