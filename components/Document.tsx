@@ -4,7 +4,8 @@ import { type Lang, translator } from './lang'
 import '../app/globals.css'
 
 const mukta = Mukta({ weight: ['400', '600', '700'], subsets: ['devanagari', 'latin'], variable: '--font-mukta' })
-const anek = Anek_Devanagari({ weight: ['700', '800'], subsets: ['devanagari', 'latin'], variable: '--font-anek' })
+// Anek is variable in width too: big figures use its condensed cut, like hand-painted shop signs.
+const anek = Anek_Devanagari({ subsets: ['devanagari', 'latin'], axes: ['wdth'], variable: '--font-anek' })
 
 export function meta(lang: Lang): Metadata {
   const t = translator(lang)
