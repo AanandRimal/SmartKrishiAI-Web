@@ -5,11 +5,11 @@ import { useEffect, useRef, useState } from 'react'
 
 const ICONS = { farm: Plant, collector: HandCoins, truck: Truck, shop: Storefront, kitchen: CookingPot, pickup: MapPin }
 
-export type Stop = { icon: keyof typeof ICONS; name: string; note: string; price?: string; loss?: string }
+export type Stop = { icon: keyof typeof ICONS; name: string; note: string; price?: string; loss?: string; tag?: boolean; cut?: boolean }
 export type Lane = { kind: 'before' | 'after'; title: string; count: string; stops: Stop[]; result: string }
 
 /** Two lanes side by side. A tomato travels each one when the section comes into view; "replay" runs it again. */
-export function Flow({ lanes, replay }: { lanes: Lane[]; replay: string }) {
+export function Flow({ lanes, replay, tag, cutLabel }: { lanes: Lane[]; replay: string; tag: string; cutLabel: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const [run, setRun] = useState(0) // 0 = not started; each increment remounts the travellers so the animation restarts
   useEffect(() => {
@@ -31,10 +31,10 @@ export function Flow({ lanes, replay }: { lanes: Lane[]; replay: string }) {
             {l.stops.map((s, i) => {
               const Icon = ICONS[s.icon]
               return (
-                <li key={s.name} className={s.icon === 'pickup' ? 'pickup' : undefined} style={{ '--i': i } as React.CSSProperties}>
+                <li key={s.name} className={[s.icon === 'pickup' ? 'pickup' : '', s.tag ? 'is-mid' : ''].join(' ').trim() || undefined} style={{ '--i': i } as React.CSSProperties}>
                   <span className="badge"><Icon size={24} weight="duotone" /></span>
                   <div>
-                    <b>{s.name}{s.price && <em>{s.price}</em>}</b>
+                    <b>{s.name}{s.price && <em>{s.price}</em>}{s.tag && <span className="mid">{tag}</span>}{s.cut && <span className="mid none">{cutLabel}</span>}</b>
                     <small>{s.note}</small>
                     {s.loss && <small className="loss">{s.loss}</small>}
                   </div>

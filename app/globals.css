@@ -61,29 +61,28 @@ sup a { color:var(--forest); text-decoration:none; font-weight:700; font-size:12
   .hero-photo { border-radius:0; aspect-ratio:4/3 }
 }
 
-/* Registry: the unit charts */
+/* Registry: bars that grow into view */
 .registry { background:var(--card) }
-.registry-charts { display:grid; grid-template-columns:minmax(0, 1.1fr) minmax(0, 1fr); gap:clamp(40px, 7vw, 96px); margin-top:64px; align-items:start }
-.registry figcaption { font-weight:700; font-size:16px; margin-bottom:18px }
-.fig-note { color:var(--faint); font-size:14px; margin-top:16px }
-.unit-plot { position:relative }
-.unit-grid { display:grid }
-.unit.lg .unit-grid { gap:5px; max-width:460px }
-.unit.sm .unit-grid { gap:4px; max-width:460px }
-.unit-grid i { aspect-ratio:1; border-radius:4px; opacity:0; transform:scale(.3); transition:opacity .35s ease, transform .35s ease }
-.unit.sm .unit-grid i { border-radius:50% }
-.unit-grid.seen i { opacity:1; transform:none }
-.unit-grid.focus i { transition-delay:0s !important; transition-duration:.12s }
-.unit-grid.focus i:not(.hl) { opacity:.22 }
-@media (prefers-reduced-motion:reduce) { .unit-grid i { opacity:1; transform:none; transition:none } }
-.tip { position:absolute; transform:translate(-50%, calc(-100% - 14px)); background:var(--ink); color:#fff; font-size:13.5px; line-height:1.35; padding:7px 11px; border-radius:7px; pointer-events:none; white-space:nowrap; z-index:2 }
-.tip b { display:block; font-family:var(--display); font-size:19px }
+.grow { display:grid; gap:26px; margin-top:56px }
+.grow-row p { font-weight:700; font-size:16.5px; margin-bottom:8px }
+.grow-row p span { margin-left:10px; font-family:var(--display); font-stretch:75%; font-weight:800; font-size:20px; color:var(--soft) }
+.gbar { display:flex; align-items:center; gap:14px; height:64px; background:#F1F3F0; border-radius:14px; overflow:hidden }
+.gbar i { display:flex; align-items:center; justify-content:flex-end; height:100%; border-radius:14px; padding-right:20px; transition:width 1.1s cubic-bezier(.2, .7, .2, 1) }
+.gbar i b { font-family:var(--display); font-stretch:75%; font-weight:800; font-size:clamp(30px, 3.6vw, 44px); line-height:1; color:var(--ink); white-space:nowrap }
+.gbar:not(.in) i { padding:0 }
+.gbar:not(.in) i b { display:none }
+.gbar .out { font-family:var(--display); font-stretch:75%; font-weight:800; font-size:clamp(30px, 3.6vw, 44px); line-height:1; transition:opacity .4s ease .9s }
+@media (prefers-reduced-motion:reduce) { .gbar i, .gbar .out { transition:none } }
+.palika-line { display:grid; grid-template-columns:minmax(220px, 340px) minmax(0, 1fr); gap:clamp(24px, 5vw, 64px); align-items:center; margin-top:64px; padding-top:32px; border-top:1px solid var(--line) }
+.palika-line .num { font-size:clamp(44px, 5vw, 64px) }
+.palika-line p { font-size:17px }
+.palika-line .seg { max-width:none; height:18px; margin:14px 0 10px }
+.fig-note { color:var(--faint); font-size:14px; margin-top:10px }
 .legend { list-style:none; margin:24px 0 0; padding:0; max-width:460px }
-.legend li { display:grid; grid-template-columns:14px 1fr auto; gap:12px; align-items:center; padding:9px 0; border-bottom:1px solid var(--line); cursor:default }
+.legend li { display:grid; grid-template-columns:14px 1fr auto; gap:12px; align-items:center; padding:9px 0; border-bottom:1px solid var(--line) }
 .legend li i { width:14px; height:14px; border-radius:4px }
 .legend li b { font-family:var(--display); font-size:20px; font-weight:700 }
-.legend li.hl span { font-weight:700 }
-@media (max-width:860px) { .registry-charts { grid-template-columns:1fr } }
+@media (max-width:860px) { .palika-line { grid-template-columns:1fr } .gbar { height:56px } }
 
 /* Context: GDP donut and three facts */
 .context-grid { display:grid; grid-template-columns:300px minmax(0, 1fr); gap:clamp(40px, 7vw, 96px); margin-top:64px; align-items:start }
@@ -272,3 +271,8 @@ footer ol { margin:0; padding-left:20px; display:grid; gap:6px }
 footer .links { display:flex; gap:20px; flex-wrap:wrap; margin-top:16px }
 footer .fine { margin-top:40px; padding-top:20px; border-top:1px solid var(--line); font-size:13px; color:var(--faint) }
 @media (max-width:860px) { footer .cols { grid-template-columns:1fr } }
+
+/* Middlemen are named in the lanes: a red tag where they take a cut, a green one where they are gone */
+.mid { font-size:12.5px; font-weight:700; padding:1px 8px; border-radius:6px; background:#FAE8E5; color:var(--red); white-space:nowrap }
+.mid.none { background:#fff; color:var(--forest) }
+.lane.before li.is-mid .badge { box-shadow:inset 0 0 0 2px #E7B3AC; color:var(--red) }

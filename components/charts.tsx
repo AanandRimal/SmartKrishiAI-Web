@@ -57,6 +57,24 @@ export function UnitChart({ parts, columns, label, size }: { parts: Part[]; colu
   )
 }
 
+/** Horizontal bars that grow once when scrolled into view. The figure sits inside the bar when it is long, after it when short. */
+export function GrowBars({ rows }: { rows: { label: string; value: string; pct: number; color: string; note?: string }[] }) {
+  const [ref, seen] = useSeen<HTMLDivElement>()
+  return (
+    <div className="grow" ref={ref}>
+      {rows.map(r => (
+        <div key={r.label} className="grow-row">
+          <p>{r.label}{r.note && <span>{r.note}</span>}</p>
+          <div className={`gbar${r.pct >= 55 ? ' in' : ''}`}>
+            <i style={{ width: seen ? `${r.pct}%` : 0, background: r.color }}><b>{r.value}</b></i>
+            {r.pct < 55 && <b className="out" style={{ opacity: seen ? 1 : 0 }}>{r.value}</b>}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 /** Donut: the centre names the whole, and names a part while it is hovered or focused. */
 export function Donut({ parts, center, label, size = 260, thick = 30 }: {
   parts: { label: string; value: number; text: string; color: string }[]

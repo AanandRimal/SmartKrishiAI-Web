@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import QRCode from 'qrcode'
-import { Donut, UnitChart } from './charts'
+import { Donut, GrowBars } from './charts'
 import { C } from './colors'
 import { DemoForm } from './DemoForm'
 import { Flow, type Lane } from './Flow'
@@ -59,33 +59,30 @@ function Hero({ t }: { t: T }) {
 }
 
 function Registry({ t }: { t: T }) {
-  const households = [
-    { label: t('Verified by a ward or Palika', 'वडा वा पालिकाले प्रमाणित गरेका'), value: t('882,000', '८.८२ लाख'), cells: 21, color: C.green },
-    { label: t('Listed, not yet verified', 'सूचीमा नाम, प्रमाणित हुन बाँकी'), value: t('1,797,000', '१७.९७ लाख'), cells: 44, color: C.gold },
-    { label: t('Not listed yet', 'सूचीमै नआएका'), value: t('1,452,000', '१४.५२ लाख'), cells: 35, color: C.gray },
-  ]
-  const palikas = [
-    { label: t('Registration complete', 'सूचीकरण पूरा'), value: t('123', '१२३'), cells: 123, color: C.green },
-    { label: t('Still in progress', 'काम बाँकी'), value: t('630', '६३०'), cells: 630, color: C.gray },
-  ]
   return (
     <section className="registry" id="numbers">
       <div className="wrap">
         <h2 className="h2">{t('4.1 million farm households. 0.88 million on a verified list.', '४१ लाख किसान परिवार। प्रमाणित सूचीमा ८.८ लाख मात्र।')}</h2>
         <p className="intro">
-          {t('Each square is 1% of Nepal’s 4,130,789 farm households, about 41,300 homes. Point at a colour to see its count.', 'हरेक कोठा देशका ४१,३०,७८९ किसान परिवारको १%, अर्थात् करिब ४१,३०० घर हो। रङमा माउस लैजानुहोस्, संख्या देखिन्छ।')}
+          {t('Nepal’s farmer registry has started, but most households are still not verified by a ward or Palika.', 'किसान सूचीकरण सुरु भएको छ, तर अधिकांश परिवार अझै वडा वा पालिकाबाट प्रमाणित भएका छैनन्।')}
           <Cite n={[1, 2]} />
         </p>
-        <div className="registry-charts">
-          <figure>
-            <figcaption>{t('Farm households in the national farmer registry', 'राष्ट्रिय किसान सूचीकरणमा किसान परिवार')}</figcaption>
-            <UnitChart size="lg" columns={10} parts={households} label={t('100 squares: 21 verified, 44 listed but not verified, 35 not listed', '१०० कोठा: २१ प्रमाणित, ४४ सूचीमा तर प्रमाणित बाँकी, ३५ सूचीमा नआएका')} />
-          </figure>
-          <figure>
-            <figcaption>{t('Nepal’s 753 local levels, one dot each', 'देशका ७५३ स्थानीय तह, एक थोप्लो एक तह')}</figcaption>
-            <UnitChart size="sm" columns={30} parts={palikas} label={t('753 dots: 123 local levels have finished registration', '७५३ थोप्ला: १२३ स्थानीय तहमा सूचीकरण पूरा')} />
-            <p className="fig-note">{t('Counts from the ministry, September 2026. Shares calculated from sources 1 and 2.', 'मन्त्रालयको असोज २०८३ को संख्या। प्रतिशत स्रोत १ र २ बाट हिसाब गरिएको।')}</p>
-          </figure>
+        <GrowBars
+          rows={[
+            { label: t('Farm households in the agriculture census', 'कृषि गणनामा किसान परिवार'), value: t('4,130,789', '४१,३०,७८९'), pct: 100, color: C.gray },
+            { label: t('Listed in the farmer registry', 'किसान सूचीकरणमा नाम दर्ता'), value: t('2.68 million', '२६.७९ लाख'), pct: 65, color: C.gold, note: t('65%', '६५%') },
+            { label: t('Verified by a ward or Palika', 'वडा वा पालिकाले प्रमाणित गरेका'), value: t('0.88 million', '८.८२ लाख'), pct: 21, color: C.green, note: t('21%', '२१%') },
+          ]}
+        />
+        <div className="palika-line">
+          <b className="num">{t('123 of 753', '७५३ मध्ये १२३')}</b>
+          <div>
+            <p>{t('local levels have finished registration', 'स्थानीय तहमा सूचीकरण पूरा भएको छ')}</p>
+            <div className="seg" role="img" aria-label={t('123 of 753 local levels complete', '७५३ मध्ये १२३ स्थानीय तह पूरा')}>
+              <i style={{ flex: 123, background: C.green }} /><i style={{ flex: 630, background: C.gray }} />
+            </div>
+            <p className="fig-note">{t('Ministry counts, September 2026. Percentages calculated from sources 1 and 2.', 'मन्त्रालयको असोज २०८३ को संख्या। प्रतिशत स्रोत १ र २ बाट हिसाब गरिएको।')}</p>
+          </div>
         </div>
       </div>
     </section>
@@ -157,22 +154,22 @@ function Context({ t }: { t: T }) {
 function Chain({ t }: { t: T }) {
   const lanes: Lane[] = [
     {
-      kind: 'before', title: t('Before', 'पहिले'), count: t('5 hands', '५ हात'),
-      result: t('The farmer gets Rs 40 of the Rs 75', 'रु. ७५ मध्ये किसानलाई रु. ४० मात्र'),
+      kind: 'before', title: t('Before', 'पहिले'), count: t('3 middlemen', '३ बिचौलिया'),
+      result: t('Middlemen keep Rs 35 of every Rs 75. The farmer gets Rs 40.', 'हरेक रु. ७५ मध्ये रु. ३५ बिचौलियाले लिए। किसानलाई रु. ४०।'),
       stops: [
         { icon: 'farm', name: t('Farmer', 'किसान'), note: t('sells at the collector’s price', 'संकलकले भनेको मूल्यमा बेच्छ'), price: t('Rs 40', 'रु. ४०') },
-        { icon: 'collector', name: t('Collector', 'संकलक'), note: t('sets the price', 'मूल्य उसैले तोक्छ') },
-        { icon: 'truck', name: t('Wholesale market', 'थोक बजार'), note: t('long haul, hours in the sun', 'लामो ढुवानी, घाममा घण्टौं'), loss: t('20–50% of fruit and vegetables is lost after harvest', 'टिपेपछि २०–५०% फलफूल-तरकारी खेर') },
-        { icon: 'shop', name: t('Retailer', 'खुद्रा पसल'), note: t('adds a margin', 'थप नाफा राख्छ') },
+        { icon: 'collector', name: t('Collector', 'संकलक'), note: t('sets the price', 'मूल्य उसैले तोक्छ'), tag: true },
+        { icon: 'truck', name: t('Wholesale market', 'थोक बजार'), tag: true, note: t('long haul, hours in the sun', 'लामो ढुवानी, घाममा घण्टौं'), loss: t('20–50% of fruit and vegetables is lost after harvest', 'टिपेपछि २०–५०% फलफूल-तरकारी खेर') },
+        { icon: 'shop', name: t('Retailer', 'खुद्रा पसल'), note: t('adds a margin', 'थप नाफा राख्छ'), tag: true },
         { icon: 'kitchen', name: t('Buyer', 'उपभोक्ता'), note: t('pays for every hand', 'हरेक हातको मूल्य तिर्छ'), price: t('Rs 75', 'रु. ७५') },
       ],
     },
     {
-      kind: 'after', title: t('With SmartKrishiAI', 'स्मार्ट कृषिसँग'), count: t('3 steps', '३ चरण'),
-      result: t('Payment goes straight to the farmer', 'भुक्तानी सिधै किसानलाई'),
+      kind: 'after', title: t('With SmartKrishiAI', 'स्मार्ट कृषिसँग'), count: t('No middlemen', 'बिचौलिया हटे'),
+      result: t('No middleman. Payment goes straight to the farmer.', 'बिचौलिया छैन। भुक्तानी सिधै किसानलाई।'),
       stops: [
         { icon: 'farm', name: t('Verified farmer', 'प्रमाणित किसान'), note: t('lists the harvest and sets the price', 'उब्जनी र मूल्य आफैं राख्छ') },
-        { icon: 'pickup', name: t('Ward pickup point', 'वडाको संकलन केन्द्र'), note: t('on set days, still fresh', 'तोकिएको दिन, ताजै') },
+        { icon: 'pickup', name: t('Ward pickup point', 'वडाको संकलन केन्द्र'), note: t('on set days, still fresh', 'तोकिएको दिन, ताजै'), cut: true },
         { icon: 'kitchen', name: t('Buyer', 'खरिदकर्ता'), note: t('a home, hotel or trader', 'घर, होटल वा व्यापारी') },
       ],
     },
@@ -207,16 +204,16 @@ function Chain({ t }: { t: T }) {
               center={{ big: t('Rs 75', 'रु. ७५'), small: t('per kilo of tomatoes', 'प्रति केजी गोलभेडा') }}
               parts={[
                 { label: t('reached the farmer', 'किसानले पाए'), value: 40, text: t('Rs 40', 'रु. ४०'), color: C.green },
-                { label: t('stayed in between', 'बीचका हातमा'), value: 35, text: t('Rs 35', 'रु. ३५'), color: C.gold },
+                { label: t('kept by middlemen', 'बिचौलियाले लिए'), value: 35, text: t('Rs 35', 'रु. ३५'), color: C.gold },
               ]}
             />
             <ul className="legend">
               <li><i style={{ background: C.green }} /><span>{t('Farmer', 'किसान')}</span><b>{t('Rs 40 (53%)', 'रु. ४० (५३%)')}</b></li>
-              <li><i style={{ background: C.gold }} /><span>{t('Collector, market, retailer', 'संकलक, बजार, पसल')}</span><b>{t('Rs 35 (47%)', 'रु. ३५ (४७%)')}</b></li>
+              <li><i style={{ background: C.gold }} /><span>{t('Middlemen: collector, market, retailer', 'बिचौलिया: संकलक, बजार, पसल')}</span><b>{t('Rs 35 (47%)', 'रु. ३५ (४७%)')}</b></li>
             </ul>
             <figcaption>{t('Tomato value chain study, Bhaktapur, 2022 data', 'गोलभेडा मूल्य शृङ्खला अध्ययन, भक्तपुर, २०७९ को तथ्याङ्क')}<Cite n={[7]} /></figcaption>
           </figure>
-          <Flow lanes={lanes} replay={t('Watch again', 'फेरि हेर्नुहोस्')} />
+          <Flow tag={t('Middleman', 'बिचौलिया')} cutLabel={t('no middleman', 'बिचौलिया छैन')} lanes={lanes} replay={t('Watch again', 'फेरि हेर्नुहोस्')} />
         </div>
 
         <div className="roles" role="table">
