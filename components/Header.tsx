@@ -19,7 +19,7 @@ export function Header({ lang }: { lang: Lang }) {
     <header className="wrap top">
       <Link className="brand" href={home(lang)}>
         <Logo />
-        <b>{t('SmartKrishiAI', 'स्मार्ट कृषि')}</b>
+        <b>{t('Smart Krishi AI', 'स्मार्ट कृषि AI')}</b>
       </Link>
       <nav>
         <a href="#chain">{t('How it works', 'कसरी चल्छ')}</a>

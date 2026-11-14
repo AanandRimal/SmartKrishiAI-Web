@@ -11,7 +11,7 @@ export function meta(lang: Lang): Metadata {
   const t = translator(lang)
   return {
     metadataBase: new URL('https://smartkrishiai.com'),
-    title: t('SmartKrishiAI · Farmers, Palikas and buyers in one chain', 'स्मार्ट कृषि · किसान, पालिका र खरिदकर्ता एउटै सूत्रमा'),
+    title: t('Smart Krishi AI · Farmers, Palikas and buyers in one chain', 'स्मार्ट कृषि AI · किसान, पालिका र खरिदकर्ता एउटै सूत्रमा'),
     description: t(
       'A Nepali farm app: AI crop and animal doctor, a verified Palika farmer registry, and a market where buyers purchase straight from farmers.',
       'किसान, पालिका र खरिदकर्तालाई एउटै सूत्रमा जोड्ने नेपाली कृषि एप। AI बाली र पशु डाक्टर, प्रमाणित किसान दर्ता, र किसानबाट सिधै किन्ने बजार।',

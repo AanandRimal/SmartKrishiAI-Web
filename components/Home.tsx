@@ -41,8 +41,8 @@ function Hero({ t }: { t: T }) {
         <h1>{t('A farmer’s work should not rot in the field.', 'किसानको मेहनत बारीमै कुहिन नदिऔं।')}</h1>
         <p className="lead">
           {t(
-            'Advice on disease arrives late, harvests leave cheap through middlemen, and the Palika has no reliable list of its own farmers. SmartKrishiAI joins the farmer, the Palika and the buyer in one chain.',
-            'रोगको सल्लाह ढिलो आउँछ, उब्जनी बिचौलियाको हातबाट सस्तोमा जान्छ, र पालिकासँग आफ्ना किसानको भरपर्दो सूची हुँदैन। स्मार्ट कृषिले किसान, पालिका र खरिदकर्तालाई एउटै सूत्रमा जोड्छ।',
+            'Advice on disease arrives late, harvests leave cheap through middlemen, and the Palika has no reliable list of its own farmers. Smart Krishi AI joins the farmer, the Palika and the buyer in one chain.',
+            'रोगको सल्लाह ढिलो आउँछ, उब्जनी बिचौलियाको हातबाट सस्तोमा जान्छ, र पालिकासँग आफ्ना किसानको भरपर्दो सूची हुँदैन। स्मार्ट कृषि AI ले किसान, पालिका र खरिदकर्तालाई एउटै सूत्रमा जोड्छ।',
           )}
         </p>
         <div className="acts">
@@ -165,7 +165,7 @@ function Chain({ t }: { t: T }) {
       ],
     },
     {
-      kind: 'after', title: t('With SmartKrishiAI', 'स्मार्ट कृषिसँग'), count: t('No middlemen', 'बिचौलिया हटे'),
+      kind: 'after', title: t('With Smart Krishi AI', 'स्मार्ट कृषि AI सँग'), count: t('No middlemen', 'बिचौलिया हटे'),
       result: t('No middleman. Payment goes straight to the farmer.', 'बिचौलिया छैन। भुक्तानी सिधै किसानलाई।'),
       stops: [
         { icon: 'farm', name: t('Verified farmer', 'प्रमाणित किसान'), note: t('lists the harvest and sets the price', 'उब्जनी र मूल्य आफैं राख्छ') },
@@ -220,13 +220,13 @@ function Chain({ t }: { t: T }) {
           <div className="roles-head" role="row">
             <span role="columnheader" />
             <span role="columnheader">{t('Before', 'पहिले')}</span>
-            <span role="columnheader">{t('With SmartKrishiAI', 'स्मार्ट कृषिसँग')}</span>
+            <span role="columnheader">{t('With Smart Krishi AI', 'स्मार्ट कृषि AI सँग')}</span>
           </div>
           {roles.map(r => (
             <div key={r.who} className="roles-row" role="row">
               <h3 role="rowheader">{r.who}</h3>
               <p className="was" role="cell" data-l={t('Before', 'पहिले')}>{r.was}</p>
-              <p className="now" role="cell" data-l={t('With SmartKrishiAI', 'स्मार्ट कृषिसँग')}>{r.now}</p>
+              <p className="now" role="cell" data-l={t('With Smart Krishi AI', 'स्मार्ट कृषि AI सँग')}>{r.now}</p>
             </div>
           ))}
         </div>

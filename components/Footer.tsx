@@ -27,7 +27,7 @@ export function Footer({ lang }: { lang: Lang }) {
     <footer className="wrap">
       <div className="cols">
         <div>
-          <Link className="brand" href={home(lang)}><b>{t('SmartKrishiAI', 'स्मार्ट कृषि')}</b></Link>
+          <Link className="brand" href={home(lang)}><b>{t('Smart Krishi AI', 'स्मार्ट कृषि AI')}</b></Link>
           <p style={{ marginTop: 10 }}>{t('The Nepali farm app that joins farmers, Palikas and buyers.', 'किसान, पालिका र खरिदकर्तालाई जोड्ने नेपाली कृषि एप।')}</p>
           <div className="links">
             <Link href={`${base}/privacy`}>{t('Privacy policy', 'गोपनीयता नीति')}</Link>
