@@ -1,0 +1,7 @@
+{
+  // The site is plain static files (next build, output: "export" writes them to ./out). No server code.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "smartkrishiai-web",
+  "compatibility_date": "2026-11-13",
+  "assets": { "directory": "./out", "not_found_handling": "404-page" }
+}
